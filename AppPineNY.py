@@ -56,10 +56,14 @@ def BoxPlotPlotly(df,col,colValue):
     BoxPlotfig = go.Figure(data=data)
     return BoxPlotfig
 
-#ChoropletEspPlotly
+#Mapa coroplético
 def ChoropletEspPlotly(df,col_count,option,georef,colref,name):
-    #df = Dataset
-    #col_count = ,option,georef,colref,name
+    #df = Dataset;
+    #col_count = Coluna que se quer contar;
+    #option = Resultado da caixa de seleção;
+    #georef = Referencia geográfica. Bairros de NY;
+    #colref = Coluna que se vai agrupar;
+    #name = Nome do mapa;
     ChoropletGRaf = go.Choroplethmapbox(geojson=georef, 
                                 locations=df[colref].loc[df[col_count]==option].value_counts().index, 
                                 z=df[colref].loc[df[col_count]==option].value_counts().values,
@@ -129,29 +133,33 @@ esp = [t for t in temp_df['spc_common'].value_counts().index if True]
 
 st.markdown("# Dados por espécie")
 
-####Montando os inputs de filtro dos gráficos de espécie gráfico
-col2_1, col2_2 = st.columns([2.3, 1]) #Estruturando a visualização
+####Montando os inputs de filtro dos gráficos de espécie
+col2_1, col2_2 = st.columns([2.7, 1.0]) #Estruturando a visualização
 with col2_1: #Caixa de seleção de espécie
-    option = st.selectbox('Qual esptécie você quer analisar?',(esp))
+    option = st.selectbox('Qual espécie você quer analisar?',(esp))
 
 with col2_2: #Slider de DAP da espécie
-    tree_dbh_slice = st.slider('Verificar DAP\'s maiores que;', 0, int(temp_df.loc[temp_df['spc_common']==option].tree_dbh.max()), 1)
+    tree_dbh_slice = st.slider('Verificar DAP\'s maiores que;', 0, int(temp_df.loc[temp_df['spc_common']==option].tree_dbh.max()), 0)
+
+#Filtro o dataset baseado no Slider
+df_filter = temp_df.loc[temp_df['tree_dbh']>=tree_dbh_slice]
 
 #Gráfico Choroplet de espécie
-df_filter = temp_df.loc[temp_df['tree_dbh']>=tree_dbh_slice]
+#Uso a option da Caixa de seleção de espécie e dataset filtrado
 Choroplet = ChoropletEspPlotly(df = df_filter,
                                    col_count = 'spc_common',
-                                   option = option,
+                                   option = option, 
                                    georef =nta_json,
                                    colref='nta',
                                    name='Num. Árvores')
 
+#Pontos de cada árvore também filtrado
 Scatter = ScatterMapPotly(df=df_filter,
                           option=option,
                           colOption='spc_common',
                           label='tree_dbh')
 
-
+#Layout do mapa
 layout=go.Layout(margin={"r":0,"t":50,"l":0,"b":0},
                  mapbox_style="carto-positron",
                  mapbox_zoom=8.5,mapbox_center = {"lat": 40.7, "lon": -73.86},
@@ -173,6 +181,3 @@ with col3_1:
     st.plotly_chart(figChoroplet_Scatter, use_container_width=True)
 with col3_2:
     st.plotly_chart(figBoxEsp, use_container_width=True)
-
-
-
