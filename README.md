@@ -4,4 +4,5 @@
 [Web Dashboard published with Streamlit](https://share.streamlit.io/padawanh/pinus_census_ny_app_streamlit/main/AppPineNY.py)
 
 Datasets
-[[New York NTA]](**Cr%C3%A9ditos**%20-%20%5Bhttps://data.cityofnewyork.us/City-Government/NTA-map/d3qk-pfyz%5D) - [[Tree Census in New York City]](https://www.kaggle.com/datasets/nycparks/tree-census)
+[[New York NTA]](**Cr%C3%A9ditos**%20-%20%5Bhttps://data.cityofnewyork.us/City-Government/NTA-map/d3qk-pfyz%5D)
+[[Tree Census in New York City]](https://www.kaggle.com/datasets/nycparks/tree-census)
